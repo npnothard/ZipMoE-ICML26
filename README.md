@@ -26,7 +26,7 @@ For further proprietary details, please refer to the LICENSE and NOTICE document
   - C++ 17
   - CMake: 4.0.0
   - python: 3.10.18
-  - Conda environment name: zipmoe
+  - conda environment name: zipmoe
   - torch: 2.8.0
   - Pybind11: 3.0.1
   - transformers: <4.50
@@ -35,9 +35,12 @@ For further proprietary details, please refer to the LICENSE and NOTICE document
 
 # ⭐ Demo Instructions
 
-**1. Download the GitHub repo.**
+**1. Clone the GitHub Repository.**
 
-**2. Prepare models**
+
+**2. Prepare Models.**
+
+
 Download model weights from Huggingface. Currently, we support the following models:
 ```bash
   - Qwen1.5: https://huggingface.co/Qwen/Qwen1.5-MoE-A2.7B-Chat
@@ -47,17 +50,24 @@ Download model weights from Huggingface. Currently, we support the following mod
 Download the BF16 model in .safetensors format. All model weights should be placed under the directory /models/model_type.
 
 
-3. Install the library denpendencies
+**3. Install Library Dependencies.**
 
-Create a new conda environment named zipmoe. 
+Create a new conda environment with name zipmoe:
+```bash
+conda create -n zipmoe python=3.10
+conda activate zipmoe
+```
 
-run: pip install accelerate chardet "datasets>=2.12.0" fastapi hjson ninja "numpy==1.22.4" openai "optimum>=1.17.1" "packaging>=20.0" pre-commit py-cpuinfo "pyarrow==12.0.0" "pydantic==1.10.12" scipy sentencepiece sphinx "torch>=2.1.1" "transformers>=4.37.1,<4.47" uvicorn
+Then, install the required Python libraries by running:
+```bash
+pip install accelerate chardet "datasets>=2.12.0" fastapi hjson ninja "numpy==1.22.4" openai "optimum>=1.17.1" "packaging>=20.0" pre-commit py-cpuinfo "pyarrow==12.0.0" "pydantic==1.10.12" scipy sentencepiece sphinx "torch>=2.1.1" "transformers>=4.37.1,<4.47" uvicorn
+```
 
-you can select form (or both) lz4 and zstd as your compressor backends. Make sure you have installed your selection.
+You can choose either lz4 or zstd as your compression backend. Make sure to install your selected option:
   - lz4 (build from source https://github.com/lz4/lz4)
   - zstd (build from source https://github.com/facebook/zstd)
 
-If you wish to use FlashAttention, make sure it is installed properly on Jetson. You can also run this demo without this. We still give instructions on how to build flash_atten on jetson platforms.
+If you plan to use FlashAttention, ensure it’s installed correctly on Jetson. Instructions for building it on Jetson are provided below. You can still run the demo without FlashAttention if you prefer.
 
 - flash_attn = 2.8.3 (build from source https://github.com/Dao-AILab/flash-attention.git, 
       -> add:
