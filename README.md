@@ -8,7 +8,9 @@ This repository contains artifact of ZipMoE, an efficient, semantically lossless
 
 We provide instructions for building and running this demo.
 Please note that this demo is currently under submission to ICML'26 and is only accessible to the reviewers.
+
 **DO NOT DISTRIBUTE**.
+
 For further proprietary details, please refer to the LICENSE and NOTICE documents.
 
 
@@ -33,16 +35,17 @@ For further proprietary details, please refer to the LICENSE and NOTICE document
 
 # ⭐ Demo Instructions
 
-1. Download the GitHub repo.
+**1. Download the GitHub repo.**
 
-2. Prepare models
-  ```bash
-  Download model weights from Huggingface. Currently, we support the following models:
+**2. Prepare models**
+Download model weights from Huggingface. Currently, we support the following models:
+```bash
   - Qwen1.5: https://huggingface.co/Qwen/Qwen1.5-MoE-A2.7B-Chat
   - DeepSeekV2:https://huggingface.co/deepseek-ai/DeepSeek-V2-Lite-Chat
   - SwitchTransformers: https://huggingface.co/google/switch-large-128
+```
+Download the BF16 model in .safetensors format. All model weights should be placed under the directory /models/model_type.
 
-Download the BF16 model in .safetensors format. All model weights should be placed in /models/model_type
 
 3. Install the library denpendencies
 
