@@ -126,6 +126,12 @@ make install
 
 ### 6. Evaluation
 
+Prior to evaluation, make sure your jetson is running on mode with maximum performance
+```bash
+sudo nvpmodel -m 0
+sudo jetson_clocks
+```
+
 You can try the stream chat mode by running:
 ```bash
 python zipmoe_stream_chat.py
