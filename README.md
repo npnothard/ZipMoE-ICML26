@@ -100,16 +100,9 @@ export MAX_JOBS=6
 pip install . --no-build-isolation
 ```
 
-4. Substitute Placeholder Paths
-
-There are two placeholder paths that need to be replaced:
-
-ZIPMOE-PREFIX: The parent directory where the ZipMoE project is located.
-
-CONDA-PREFIX: The path of your conda environment, which can be obtained by running the command: echo $CONDA_PREFIX.
 
 
-4. Subtitute placeholder paths with your own environment
+**4. Subtitute placeholder paths with your own environment**
 
 There are two placeholder paths that need to be replaced:
 
@@ -120,7 +113,7 @@ There are two placeholder paths that need to be replaced:
 
 
 
-5. Build the Project
+**5. Build the Project**
 
 Navigate to the csrc/build directory and run the following commands:
 ```bash
@@ -131,7 +124,7 @@ make install
 ```
 
 
-6. Evaluation
+##6. Evaluation##
 
 You can try the stream chat mode by running:
 ```bash
