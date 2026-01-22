@@ -67,58 +67,91 @@ You can choose either lz4 or zstd as your compression backend. Make sure to inst
   - lz4 (build from source https://github.com/lz4/lz4)
   - zstd (build from source https://github.com/facebook/zstd)
 
-If you plan to use FlashAttention, ensure it’s installed correctly on Jetson. Instructions for building it on Jetson are provided below. You can still run the demo without FlashAttention if you prefer.
+If you plan to use FlashAttention, ensure it’s installed correctly on Jetson. Instructions for building it on Jetson are provided below. 
+You can still run the demo without FlashAttention if you prefer.
 
-- flash_attn = 2.8.3 (build from source https://github.com/Dao-AILab/flash-attention.git, 
-      -> add:
-	    if "87" in cuda_archs():
-		cc_flag.append("-gencode")
-		cc_flag.append("arch=compute_87,code=sm_87") in (around) line 179 of setup.py
-      -> git checkout v2.8.3
-      -> export TORCH_CUDA_ARCH_LIST="8.7"
-      -> export FLASH_ATTN_CUDA_ARCHS=87
-      -> export MAX_JOBS=6
-      -> pip install . --no-build-isolation
-      )
+To install FlashAttention:
 
+3.1. Clone the repository:
+```bash
+git clone https://github.com/Dao-AILab/flash-attention.git
+cd flash-attention
+git checkout v2.8.3
+```
+
+3.2. Modify setup.py (around line 179):
+```bash
+# Note that 87 is for Jetson AGX Orin. The number is specific to your hardware.
+if "87" in cuda_archs():
+    cc_flag.append("-gencode")
+    cc_flag.append("arch=compute_87,code=sm_87")
+```
+
+3.3. Set environment variables:
+```bash
+export TORCH_CUDA_ARCH_LIST="8.7"
+export FLASH_ATTN_CUDA_ARCHS=87
+export MAX_JOBS=6
+```
+
+3.4. Install FlashAttention:
+```bash
+# This may take hours.
+pip install . --no-build-isolation
+```
+
+4. Substitute Placeholder Paths
+
+There are two placeholder paths that need to be replaced:
+
+ZIPMOE-PREFIX: The parent directory where the ZipMoE project is located.
+
+CONDA-PREFIX: The path of your conda environment, which can be obtained by running the command: echo $CONDA_PREFIX.
 
 
 4. Subtitute placeholder paths with your own environment
 
-There are two placeholder paths, replace all of them.
-- ZIPMOE-PREFIX: The father directory where you put the ZipMoE directory.
-- CONDA-PREFIX: This can be verified using $CONDA_PREFIX. Replace it with your output of this command.
+There are two placeholder paths that need to be replaced:
+
+- ZIPMOE-PREFIX: The parent directory where the ZipMoE project is located.
+
+- CONDA-PREFIX: The path of your conda environment, which can be obtained by running the command: echo $CONDA_PREFIX.
 
 
-5. Build the project
 
-enter csrc/build
-run cmake ..
-make -j$(n_proc)
+
+5. Build the Project
+
+Navigate to the csrc/build directory and run the following commands:
+```bash
+cd csrc/build
+cmake ..
+make -j$(nproc)
 make install
+```
 
 
 6. Evaluation
 
-You can try stream chat mode by running 
-
+You can try the stream chat mode by running:
+```bash
 python zipmoe_stream_chat.py
+```
+For large-scale evaluations, navigate to the evaluation/ directory and run the appropriate bash scripts:
+```bash
+cd evaluation/
 
-For large-scale evaluations, go to evaluation/, and you may run the following bash scripts:
+# Single-batch inference:
+./evaluate_mem_latency.sh
 
-cd evaluation/ 
-./evaluate_mem_latency.sh for single-batch inference.
-./evaluate_batch_tps.sh for batch processing.
+# Batch processing:
+./evaluate_batch_tps.sh
+```
 
+**Note:** Before deploying a model for the first time, it will offload its parameters, which may take around 10 minutes. This is a one-time process. 
+Subsequent initializations of the same model will not require offloading.
+Also, the first run of each session may be slower than subsequent runs because the model tensors are not preloaded onto the GPU prior to the first prompt.
 
-
-Initialization Time: Before the first run of a new model, the system must offload parameters. This is a one-time process that may take approximately 10 minutes. Subsequent initializations of the same model will not require this step.
-
-Warm-up: The first inference run in a session will be slower than subsequent runs, as tensors are not forced onto the GPU prior to the first prompt.
-
-Note the before each new deployment of a model, it will first offload the parameters, which may take around 10 minutes. This is a one-shot process, further initialization of this model will not require offloading anymore.
-
-The first run of each session is will be slower than the subsequent runs, because we do not force tensor to be filled on GPU prior to your first prompt.
 
 
 ---
@@ -126,7 +159,7 @@ The first run of each session is will be slower than the subsequent runs, becaus
 
 # ⭕ Limitations
 
-- ZipMoE is mainly tested on NVIDIA Jetson AGX Orin. The current implementation is not guaranteed to build successfully without modifying CMakeLists.txt.
+- ZipMoE has been primarily tested on the NVIDIA Jetson AGX Orin. The current implementation is not guaranteed to work without modifying the CMakeLists.txt file for other platforms.
 
-- ZipMoE is mainly optimized for devices with uniform memory architectures. For discrete GPUs, its efficiency is not guaranteed.
+- ZipMoE is optimized for edge and mobile devices with uniform memory architectures. Efficiency on discrete GPUs is not guaranteed.
 
