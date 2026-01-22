@@ -124,7 +124,7 @@ make install
 ```
 
 
-##6. Evaluation##
+## 6. Evaluation
 
 You can try the stream chat mode by running:
 ```bash
