@@ -1,4 +1,4 @@
-<img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/67be9d8d-8cd9-41b7-84fb-1853d9212c72" /># ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling
+# ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling
 
 This repository contains artifact of ZipMoE, an efficient, semantically lossless serving system for Mixture-of-Experts models on mobile and edge computing platforms. 
 
