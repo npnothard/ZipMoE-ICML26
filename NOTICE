@@ -1,0 +1,23 @@
+This project includes third-party software components under the following
+licenses. These components are subject to their original license terms.
+
+-------------------------------------------------------------------------------
+EfficientMoE
+-------------------------------------------------------------------------------
+Licensed under the Apache License, Version 2.0.
+Copyright (c) EfficientMoE Team.
+
+-------------------------------------------------------------------------------
+PCRE (pcre_string_piece.h)
+-------------------------------------------------------------------------------
+Copyright (c) 2005, Google Inc.
+All rights reserved.
+Licensed under a BSD-style license.
+
+-------------------------------------------------------------------------------
+Additional BSD-style licensed code
+-------------------------------------------------------------------------------
+Copyright (c) Shuo Chen.
+Licensed under a BSD-style license.
+
+See individual source file headers for full license texts and attributions.

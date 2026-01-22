@@ -1,0 +1,41 @@
+Copyright (c) 2026 <ZipMoE / Anonymous Team>
+All rights reserved.
+
+===============================================================================
+ACADEMIC NON-COMMERCIAL SOFTWARE LICENSE
+===============================================================================
+
+Permission is hereby granted, free of charge, to any person or organization
+obtaining a copy of this software and associated documentation files (the
+"Software"), to use, reproduce, modify, and distribute the Software solely
+for the purposes of:
+
+    - Academic research
+    - Non-profit research
+    - Educational use
+
+Commercial use of the Software, in whole or in part, is strictly prohibited
+without prior written permission from the copyright holder.
+
+For the purposes of this License, "commercial use" includes, but is not limited
+to:
+
+    - Use of the Software or its derivatives in any commercial product or service
+    - Training, fine-tuning, or deploying models for commercial applications
+    - Integration of the Software into proprietary or revenue-generating systems
+    - Use of the Software to provide paid services or consultancy
+
+This License applies only to the portions of the Software authored by the
+copyright holder(s) of this project.
+
+Portions of the Software may incorporate third-party open-source components.
+Such components are licensed under their respective licenses, and their use
+is governed solely by those licenses. See the NOTICE file for details.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
+OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
