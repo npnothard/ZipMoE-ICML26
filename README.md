@@ -157,8 +157,6 @@ Also, the first run of each session may be slower than subsequent runs because t
 
 
 ## 🚩 Limitations
-
 - ZipMoE has been primarily tested on the NVIDIA Jetson AGX Orin. The current implementation is not guaranteed to work without modifying the CMakeLists.txt file for other platforms.
-
 - ZipMoE is optimized for edge and mobile devices with uniform memory architectures. Efficiency on discrete GPUs is not guaranteed.
 
