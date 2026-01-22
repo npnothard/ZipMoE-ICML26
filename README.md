@@ -14,7 +14,7 @@ Please note that this demo is currently under submission to ICML'26 and is only 
 For further proprietary details, please refer to the LICENSE and NOTICE documents.
 
 
-# 💻 Hardware/Software Prerequisite
+## 💻 Hardware/Software Prerequisite
 - Edge Computing Platform: Any UMA device compatible with CUDA and the required software environments. However, we recommend using the Jetson AGX Orin modules, as this configuration is guaranteed to work without needing to modify the CMakeLists.txt build scripts.
 - Operating systems: Ubuntu 22.04 (Jetpack 6.2.1)
 - Resource requirement
@@ -33,12 +33,12 @@ For further proprietary details, please refer to the LICENSE and NOTICE document
 
 
 
-# ⭐ Demo Instructions
+## ⭐ Demo Instructions
 
-**1. Clone the GitHub Repository.**
+### 1. Clone the GitHub Repository.
 
 
-**2. Prepare Models.**
+### 2. Prepare Models.
 
 
 Download model weights from Huggingface. Currently, we support the following models:
@@ -50,7 +50,7 @@ Download model weights from Huggingface. Currently, we support the following mod
 Download the BF16 model in .safetensors format. All model weights should be placed under the directory /models/model_type.
 
 
-**3. Install Library Dependencies.**
+### 3. Install Library Dependencies.
 
 Create a new conda environment with name zipmoe:
 ```bash
@@ -102,7 +102,7 @@ pip install . --no-build-isolation
 
 
 
-**4. Subtitute placeholder paths with your own environment**
+### 4. Subtitute placeholder paths with your own environment
 
 There are two placeholder paths that need to be replaced:
 
@@ -113,7 +113,7 @@ There are two placeholder paths that need to be replaced:
 
 
 
-**5. Build the Project**
+### 5. Build the Project
 
 Navigate to the csrc/build directory and run the following commands:
 ```bash
@@ -124,7 +124,7 @@ make install
 ```
 
 
-## 6. Evaluation
+### 6. Evaluation
 
 You can try the stream chat mode by running:
 ```bash
@@ -150,7 +150,7 @@ Also, the first run of each session may be slower than subsequent runs because t
 ---
 
 
-# ⭕ Limitations
+## ⭕ Limitations
 
 - ZipMoE has been primarily tested on the NVIDIA Jetson AGX Orin. The current implementation is not guaranteed to work without modifying the CMakeLists.txt file for other platforms.
 
