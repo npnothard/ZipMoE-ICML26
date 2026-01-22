@@ -1,4 +1,4 @@
-# ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling
+<img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/67be9d8d-8cd9-41b7-84fb-1853d9212c72" /># ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling
 
 This repository contains artifact of ZipMoE, an efficient, semantically lossless serving system for Mixture-of-Experts models on mobile and edge computing platforms. 
 
@@ -156,7 +156,7 @@ Also, the first run of each session may be slower than subsequent runs because t
 ---
 
 
-## ⭕ Limitations
+## 🚩 Limitations
 
 - ZipMoE has been primarily tested on the NVIDIA Jetson AGX Orin. The current implementation is not guaranteed to work without modifying the CMakeLists.txt file for other platforms.
 
