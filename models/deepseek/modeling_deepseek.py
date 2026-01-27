@@ -426,22 +426,9 @@ class MoEGate(nn.Module):
         ### compute gating score
         hidden_states = hidden_states.view(-1, h)
         
-        # YYC DEBUG
-        if torch.isnan(hidden_states).any():
-            print(f"⚠️ NaN detected in HIDDENSTATE, occured in layer {self.layer_id}")
-        
-        # YYC DEBUG
-        if torch.isnan(self.weight).any():
-            print(f"⚠️ NaN detected in WEIGHT, occured in layer {self.layer_id}")
-        
         logits = F.linear(
             hidden_states.type(torch.float32), self.weight.type(torch.float32), None
         )
-        
-        # YYC DEBUG
-        if torch.isnan(logits).any():
-            print(f"⚠️ NaN detected in LOGITS, occured in layer {self.layer_id}")
-        
         
         
         if self.scoring_func == "softmax":
@@ -451,10 +438,7 @@ class MoEGate(nn.Module):
                 f"insupportable scoring function for MoE gating: {self.scoring_func}"
             )
             
-            
-        # YYC DEBUG
-        if torch.isnan(scores).any():
-            print(f"⚠️ NaN detected in GATE, occured in layer {self.layer_id}")
+
 
         ### select top-k experts
         if self.topk_method == "greedy":

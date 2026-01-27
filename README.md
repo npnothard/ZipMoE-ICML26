@@ -126,11 +126,15 @@ make install
 
 ### 6. Evaluation
 
-Prior to evaluation, make sure your jetson is running on mode with maximum performance
+Prior to evaluation, make sure your jetson is running on mode with maximum performance:
 ```bash
 sudo nvpmodel -m 0
 sudo jetson_clocks
 ```
+
+You can set correct configurations specific to your hardware by profiling a inference with nsight systems.
+The default configuration entrypoint is utils/config.py
+
 
 You can try the stream chat mode by running:
 ```bash
