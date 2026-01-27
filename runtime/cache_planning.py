@@ -45,9 +45,8 @@ def DelaySimu(
     num_compute_ops = num_file_chunks * ( k - num_full_cached ) * tensors_per_expert
     EXP_IO_DELAY = SM_IO_delay * compression_ratio / num_file_chunks
     ComputeBottleneck = (
-        math.ceil( num_compute_ops / compute_pool_size ) * ( decompression_delay + EXP_IO_DELAY*compute_pool_size ) + 
-        ( num_compute_ops % compute_pool_size) * (decompression_delay + EXP_IO_DELAY*num_file_chunks)
-    ) 
+        ( num_compute_ops / compute_pool_size ) * ( decompression_delay + EXP_IO_DELAY )
+    )     
     IOBottleneck = tensors_per_expert * SM_IO_delay * ( k - num_full_cached - num_sm_cached ) + num_sm_cached * tensors_per_expert* SM_IO_delay * compression_ratio
     return max(ComputeBottleneck, IOBottleneck)
 
@@ -163,6 +162,105 @@ def ObtainDistFromTrace(
     return [p/sum(many_batches_data) for p in many_batches_data]
     
 
+
+
+def CoverageToWeight(
+    target_probs,
+    k, 
+    max_iter=50,
+    tol=1e-8
+):
+    # This function uses the algorithm proposed by:
+    # X.-H. Chen et al., "Weighted Finite Population Sampling to Maximize Entropy" in Biometrika (1994)
+    # To convert frequency obtained from trace to Poission sampling probabilities that complies with the frequency constraints.
+    pi = np.array(target_probs)
+    N = len(pi)
+    if not np.isclose(np.sum(pi), k):
+        raise ValueError(f"[ZipMoE Trace Error] Sum of target probabilities ({np.sum(pi)}) must equal k: ({k})")
+    # Initialize w
+    w = pi / (1.0 - pi + 1e-12) 
+    for iteration in range(max_iter):
+        # dp[j][m] is the weighted sum of selecting m elements in the j elements
+        dp = np.zeros((N + 1, k + 1))
+        dp[:, 0] = 1.0
+        for j in range(1, N + 1):
+            for m in range(1, k + 1):
+                # State transition: E(j, m) = E(j-1, m) + w[j-1] * E(j-1, m-1)
+                dp[j][m] = dp[j-1][m] + w[j-1] * dp[j-1][m-1]
+        
+        # Compute current_pi: pi_i = w_i * [E_{-i}(k-1) / E(k)]
+        b_dp = np.zeros((N + 2, k + 1))
+        b_dp[:, 0] = 1.0
+        for j in range(N, 0, -1):
+            for m in range(1, k + 1):
+                b_dp[j][m] = b_dp[j+1][m] + w[j-1] * b_dp[j+1][m-1]
+        
+        current_pi = np.zeros(N)
+        for i in range(N):
+            # choose m elements from top i-1, and k-1-m elements from i+1 to end
+            e_minus_i_k_minus_1 = 0
+            for m in range(k):
+                e_minus_i_k_minus_1 += dp[i][m] * b_dp[i+2][k-1-m]
+            
+            current_pi[i] = w[i] * e_minus_i_k_minus_1 / dp[N][k]
+        
+        # Update the weight via (7) in the paper:
+        #  w_new = w_old * (target_pi / current_pi)
+        diff = np.linalg.norm(current_pi - pi)
+        if diff < tol:
+            print(f"[Coverage To Weight] Converged in {iteration} iterations.")
+            return w.tolist()
+            
+        w = w * (pi / (current_pi + 1e-12))
+        
+        # Normalization
+        w /= np.mean(w)
+
+    print("[Coverage To Weight] Did not reach convergence tolerance.")
+    return w.tolist()
+
+
+
+def WeightToProb(
+    weight
+):
+    Prob = [w / (1 + w) for w in weight]
+    return Prob#[p/sum(Prob) for p in Prob]
+
+
+def scale_to_k(probs, k, tol=1e-9):
+    pi = np.array(probs, dtype=float)
+    if np.sum(pi) == 0:
+        return pi
+    pi = pi * (k / np.sum(pi))
+
+    n = len(pi)
+    remaining_indices = np.arange(n)
+    remaining_k = float(k)
+    while len(remaining_indices) > 0:
+        current_sum = np.sum(pi[remaining_indices])
+        if current_sum < tol:
+            break
+        factor = remaining_k / current_sum
+        new_values = pi[remaining_indices] * factor
+        over_ones = remaining_indices[new_values >= 1.0 - tol]
+        if len(over_ones) == 0:
+            pi[remaining_indices] = new_values
+            break
+        pi[over_ones] = 1.0 - tol
+        remaining_k -= len(over_ones)
+        remaining_indices = np.array([i for i in remaining_indices if i not in over_ones])
+        if remaining_k <= 0:
+            pi[remaining_indices] = 0.0
+            break
+            
+    return pi
+
+
+def WeightToProb(weight):
+    return [w / (1 + w) for w in weight]
+
+
 def PlanCache(
     trace_path,
     batch_size,
@@ -180,24 +278,14 @@ def PlanCache(
     step_size = 0.05,
     synthetic = False
 ):
-    sorted_prob_dist = ObtainDistFromTrace(
-        batch_size,
-        trace_path
-    )
-    experts = np.array(range(num_experts))
-    weights = np.array(sorted_prob_dist)
-    unique_counts = []
-    for _ in range(10000):
-        activations = []
-        for _ in range(batch_size):
-            sample = np.random.choice(experts, size=k, replace=False, p=weights)
-            activations.append(sample)
-        unique_count = len(set(itertools.chain.from_iterable(activations)))
-        unique_counts.append(unique_count)
-    avg_unique_count = int(sum(unique_counts)/len(unique_counts))
-    print(f"Actually activated sample result = {avg_unique_count}")
-    best_cache_pool_ratio , feasible= CachePoolPlanningSimu(
-        unique_count,
+    sorted_prob_dist = ObtainDistFromTrace(batch_size, trace_path)
+    target_probs = scale_to_k(sorted_prob_dist, k)
+    sorted_prob_weight = CoverageToWeight(target_probs, k)
+    cps_probs = WeightToProb(sorted_prob_weight)
+    print(f"Bernoulli probs sum: {np.sum(cps_probs):.4f}")
+    avgk = int(np.sum(cps_probs))
+    best_cache_pool_ratio , feasible = CachePoolPlanningSimu(
+        avgk, 
         num_experts,
         num_sparse_layers,
         tensors_per_expert,
@@ -208,9 +296,8 @@ def PlanCache(
         device_memory_ratio,
         decompression_delay,
         SM_IO_delay,
-        sorted_prob_dist,
+        cps_probs,
         step_size
     )
-    print(f"[ZipMoE Cache Pool Planning] Best cache pool ratio determined: {best_cache_pool_ratio:.2f}")
+    print(f"[ZipMoE Cache Pool Planning] Best ratio: {best_cache_pool_ratio:.2f}")
     return best_cache_pool_ratio if feasible else 0.99, feasible
-    
