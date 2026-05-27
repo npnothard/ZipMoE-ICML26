@@ -21,6 +21,7 @@
 
 #include "base/noncopyable.hpp"
 #include "topology/model_topology.hpp"
+#include "tensor_engine/zipmoe_io_handle.hpp"
 #include "utils/logger.hpp"
 #include "utils/cuda_utils.hpp"
 #include "prefetch/task_scheduler.hpp"

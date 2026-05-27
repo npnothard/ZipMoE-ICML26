@@ -13,6 +13,7 @@
 
 void zipmoe_launch_tensor_recover(
     uint16_t* gpu_output_tensor, 
+    const uint8_t* gpu_exp_ptr,
     const uint8_t* gpu_sm_ptr,
     size_t num_elements,
     cudaStream_t tensor_stream

@@ -62,6 +62,7 @@ class ZSTDcompressor{
             size_t& compressed_size,
             size_t& original_size,
             uint8_t* decompressed_ptr
+        );
 };
 
 

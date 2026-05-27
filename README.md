@@ -1,4 +1,4 @@
-# ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling
+# ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling  
 
 This repository contains artifact of ZipMoE, an efficient, semantically lossless serving system for Mixture-of-Experts models on mobile and edge computing platforms. 
 
@@ -6,12 +6,25 @@ This repository contains artifact of ZipMoE, an efficient, semantically lossless
 
 ---
 
-We provide instructions for building and running this demo.
-Please note that this demo is currently under submission to ICML'26 and is only accessible to the reviewers.
+###
 
-**DO NOT DISTRIBUTE**.
 
-For further proprietary details, please refer to the LICENSE and NOTICE documents.
+
+<p align="center">
+  📄 <a href="https://arxiv.org/abs/2601.21198">Paper</a>
+  &nbsp; | &nbsp;
+  🚀 <a href="#-quick-start">Quick Start</a>
+  &nbsp; | &nbsp;
+  📚 <a href="#-citation">Citation</a>
+</p>
+
+
+## 🔥 News
+- [2026/05/27] The code of our paper has been released.
+- [2026/05/01] Our ZipMoE paper has been accepted to ICML 2026
+
+
+*For further proprietary details, please refer to the LICENSE and NOTICE documents.*
 
 
 ## 💻 Hardware/Software Prerequisite
@@ -30,13 +43,14 @@ For further proprietary details, please refer to the LICENSE and NOTICE document
   - torch: 2.8.0
   - Pybind11: 3.0.1
   - transformers: <4.50
+  - huggingface_hub: <1.0
 
 
 
-## ⭐ Demo Instructions
+## 🚀 Quick Start
 
 ### 1. Clone the GitHub Repository.
-
+**Rename the directory of the code asset as: ZipMoE.**
 
 ### 2. Prepare Models.
 
@@ -60,7 +74,7 @@ conda activate zipmoe
 
 Then, install the required Python libraries by running:
 ```bash
-pip install accelerate chardet "datasets>=2.12.0" fastapi hjson ninja "numpy==1.22.4" openai "optimum>=1.17.1" "packaging>=20.0" pre-commit py-cpuinfo "pyarrow==12.0.0" "pydantic==1.10.12" scipy sentencepiece sphinx "torch>=2.1.1" "transformers>=4.37.1,<4.47" uvicorn
+pip install accelerate chardet "datasets>=2.12.0" fastapi hjson ninja "numpy==1.22.4" "huggingface_hub<1.0" openai "optimum>=1.17.1" "packaging>=20.0" pre-commit py-cpuinfo "pyarrow==12.0.0" "pydantic==1.10.12" scipy sentencepiece sphinx "torch>=2.1.1" "transformers>=4.37.1,<4.47" uvicorn nvtx
 ```
 
 You can choose either lz4 or zstd as your compression backend. Make sure to install your selected option:
@@ -104,7 +118,9 @@ pip install . --no-build-isolation
 
 ### 4. Subtitute placeholder paths with your own environment
 
-There are two placeholder paths that need to be replaced:
+
+
+There are two placeholder paths that need to be replaced as well:
 
 - ZIPMOE-PREFIX: The parent directory where the ZipMoE project is located.
 
@@ -164,3 +180,19 @@ Also, the first run of each session may be slower than subsequent runs because t
 - ZipMoE has been primarily tested on the NVIDIA Jetson AGX Orin. The current implementation is not guaranteed to work without modifying the CMakeLists.txt file for other platforms.
 - ZipMoE is optimized for edge and mobile devices with uniform memory architectures. Efficiency on discrete GPUs is not guaranteed.
 
+
+---
+
+## 📚 Citation
+
+
+If you find ZipMoE useful in your research, please consider citing:
+
+```bibtex
+@inproceedings{zipmoe2026,
+  title = {ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling},
+  author = {Yang, Yuchen and Zhao, Yaru and Yang, Pu and Wang, Shaowei and Zhou, Zhi-Hua},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
+  year = {2026}
+}
+```
