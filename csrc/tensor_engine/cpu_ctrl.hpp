@@ -1,4 +1,4 @@
-// Copyright (c) 2026 <ZipMoE / Anonymous Team>.
+// Copyright (c) 2026 <ZipMoE / MINT, Nanjing University>.
 // All rights reserved.
 //
 // This source code is licensed under the Academic Non-Commercial License.

@@ -1,4 +1,4 @@
-# Copyright (c) 2026 <ZipMoE / Anonymous Team>.
+# Copyright (c) 2026 <ZipMoE / MINT, Nanjing University>.
 # All rights reserved.
 #
 # Modifications and additions to this file are licensed under the
