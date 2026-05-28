@@ -27,7 +27,7 @@ This repository contains artifact of ZipMoE, an efficient, semantically lossless
 *For further proprietary details, please refer to the LICENSE and NOTICE documents.*
 
 
-## 💻 Hardware/Software Prerequisite
+## 💻 Hardware/Software Prerequisites
 - Edge Computing Platform: Any UMA device compatible with CUDA and the required software environments. However, we recommend using the Jetson AGX Orin modules, as this configuration is guaranteed to work without needing to modify the CMakeLists.txt build scripts.
 - Operating systems: Ubuntu 22.04 (Jetpack 6.2.1)
 - Resource requirement
